@@ -43,7 +43,7 @@ public class Spike {
                 continue;
             }
 
-            if(input.startsWith("unmark ")) {
+            if (input.startsWith("unmark ")) {
                 int index = Integer.parseInt(input.substring(7)) - 1;
                 tasks[index].unmark();
 
