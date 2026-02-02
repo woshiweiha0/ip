@@ -1,9 +1,15 @@
+/**
+ * Spike is a simple command-line task manager.
+ * It supports Todo, Deadline, and Event tasks.
+ */
+
 import java.util.Scanner;
 
 public class Spike {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        // Stores all tasks using polymorphism
         Task[] tasks = new Task[100];
         int taskCount = 0;
 
@@ -12,9 +18,11 @@ public class Spike {
         System.out.println("What can I do for you?");
         printLine();
 
+        // Main input loop
         while (true) {
             String input = scanner.nextLine();
 
+            // Exit command
             if (input.equals("bye")) {
                 printLine();
                 System.out.println("Bye. Hope to see you again soon!");
@@ -22,6 +30,7 @@ public class Spike {
                 break;
             }
 
+            // List all tasks
             if (input.equals("list")) {
                 printLine();
                 System.out.println("Here are the tasks in your list:");
@@ -32,6 +41,7 @@ public class Spike {
                 continue;
             }
 
+            // Mark a task as done
             if (input.startsWith("mark ")) {
                 int index = Integer.parseInt(input.substring(5)) - 1;
                 tasks[index].markAsDone();
@@ -43,6 +53,7 @@ public class Spike {
                 continue;
             }
 
+            // Mark a task as not done
             if (input.startsWith("unmark ")) {
                 int index = Integer.parseInt(input.substring(7)) - 1;
                 tasks[index].unmark();
@@ -54,6 +65,7 @@ public class Spike {
                 continue;
             }
 
+            // Add a Todo task
             if (input.startsWith("todo ")) {
                 String description = input.substring(5);
                 Task task = new Todo(description);
@@ -69,6 +81,7 @@ public class Spike {
                 continue;
             }
 
+            // Add a Deadline task
             if (input.startsWith("deadline ")) {
                 String rest = input.substring(9);
                 String[] parts = rest.split("/by");
@@ -85,6 +98,7 @@ public class Spike {
                 continue;
             }
 
+            // Add an Event task
             if (input.startsWith("event ")) {
                 String rest = input.substring(6);
                 String[] fromSplit = rest.split("/from");
