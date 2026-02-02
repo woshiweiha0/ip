@@ -6,6 +6,8 @@
 import java.util.Scanner;
 
 public class Spike {
+    private static final String LINE = "__________________________________________";
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -123,6 +125,6 @@ public class Spike {
     }
 
     private static void printLine() {
-        System.out.println("__________________________________________");
+        System.out.println(LINE);
     }
 }
