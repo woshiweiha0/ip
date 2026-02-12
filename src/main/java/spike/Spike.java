@@ -2,6 +2,7 @@
  * Spike is a simple command-line task manager.
  * It supports Todo, Deadline, and Event tasks.
  */
+package spike;
 
 import java.util.Scanner;
 
