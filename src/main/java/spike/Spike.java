@@ -69,7 +69,7 @@ public class Spike {
 
                 case "todo":
                     if (rest.isEmpty()) {
-                        throw new DukeException("The description of a todo cannot be empty.");
+                        throw new SpikeException("The description of a todo cannot be empty.");
                     }
                     Task todo = new Todo(rest);
                     tasks[taskCount++] = todo;
@@ -84,17 +84,17 @@ public class Spike {
                 case "deadline": {
                     // expecting: <desc> /by <time>
                     if (!rest.contains("/by")) {
-                        throw new DukeException("A deadline must have '/by <time>'.");
+                        throw new SpikeException("A deadline must have '/by <time>'.");
                     }
                     String[] dParts = rest.split("/by", 2);
                     String description = dParts[0].trim();
                     String by = dParts[1].trim();
 
                     if (description.isEmpty()) {
-                        throw new DukeException("The description of a deadline cannot be empty.");
+                        throw new SpikeException("The description of a deadline cannot be empty.");
                     }
                     if (by.isEmpty()) {
-                        throw new DukeException("The time for a deadline cannot be empty. Use: deadline <desc> /by <time>");
+                        throw new SpikeException("The time for a deadline cannot be empty. Use: deadline <desc> /by <time>");
                     }
 
                     Task deadline = new Deadline(description, by);
@@ -111,7 +111,7 @@ public class Spike {
                 case "event": {
                     // expecting: <desc> /from <start> /to <end>
                     if (!rest.contains("/from") || !rest.contains("/to")) {
-                        throw new DukeException("An event must have '/from <start>' and '/to <end>'.");
+                        throw new SpikeException("An event must have '/from <start>' and '/to <end>'.");
                     }
 
                     String[] fromSplit = rest.split("/from", 2);
@@ -122,10 +122,10 @@ public class Spike {
                     String to = toSplit[1].trim();
 
                     if (description.isEmpty()) {
-                        throw new DukeException("The description of an event cannot be empty.");
+                        throw new SpikeException("The description of an event cannot be empty.");
                     }
                     if (from.isEmpty() || to.isEmpty()) {
-                        throw new DukeException("Event start/end time cannot be empty. Use: event <desc> /from <start> /to <end>");
+                        throw new SpikeException("Event start/end time cannot be empty. Use: event <desc> /from <start> /to <end>");
                     }
 
                     Task event = new Event(description, from, to);
@@ -140,14 +140,14 @@ public class Spike {
                 }
 
                 default:
-                    throw new DukeException("I'm sorry, but I don't know what that means :-(");
+                    throw new SpikeException("I'm sorry, but I don't know what that means :-(");
                 }
 
                 if (command.equals("bye")) {
                     break;
                 }
 
-            } catch (DukeException e) {
+            } catch (SpikeException e) {
                 printLine();
                 System.out.println("OOPS!!! " + e.getMessage());
                 printLine();
@@ -158,22 +158,22 @@ public class Spike {
     }
 
 
-    private static int parseTaskIndex(String raw, int taskCount) throws DukeException {
+    private static int parseTaskIndex(String raw, int taskCount) throws SpikeException {
         String trimmed = raw.trim();
 
         if (trimmed.isEmpty()) {
-            throw new DukeException("Please specify a task number.");
+            throw new SpikeException("Please specify a task number.");
         }
 
         int number;
         try {
             number = Integer.parseInt(trimmed);
         } catch (NumberFormatException e) {
-            throw new DukeException("Task number must be a number.");
+            throw new SpikeException("Task number must be a number.");
         }
 
         if (number < 1 || number > taskCount) {
-            throw new DukeException("Task number is out of range.");
+            throw new SpikeException("Task number is out of range.");
         }
 
         return number - 1;
