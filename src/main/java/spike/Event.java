@@ -2,6 +2,8 @@
  * Represents an Event task.
  * An Event has a start time and an end time.
  */
+package spike;
+
 public class Event extends Task {
     protected String from;  // Start time
     protected String to;    // End time

@@ -2,6 +2,8 @@
  * Represents a Deadline task.
  * A Deadline must be completed by a certain time.
  */
+package spike;
+
 public class Deadline extends Task {
     protected String by;    // Deadline time (treated as a string)
 

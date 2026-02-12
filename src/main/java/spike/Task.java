@@ -2,6 +2,8 @@
  * Represents a generic task.
  * All task types (Todo, Deadline, Event) share these common properties.
  */
+package spike;
+
 public class Task {
     protected String description;
     protected boolean isDone;

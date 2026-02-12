@@ -2,6 +2,8 @@
  * Represents a Todo task.
  * A Todo has no date or time attached to it.
  */
+package spike;
+
 public class Todo extends Task {
     public Todo(String description) {
         super(description);
