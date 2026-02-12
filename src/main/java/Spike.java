@@ -46,7 +46,7 @@ public class Spike {
 
                 // Mark a task as done
                 if (input.startsWith("mark ")) {
-                    int index = Integer.parseInt(input.substring(5)) - 1;
+                    int index = parseTaskIndex(input.substring(5), taskCount);
                     tasks[index].markAsDone();
 
                     printLine();
@@ -58,7 +58,7 @@ public class Spike {
 
                 // Mark a task as not done
                 if (input.startsWith("unmark ")) {
-                    int index = Integer.parseInt(input.substring(7)) - 1;
+                    int index = parseTaskIndex(input.substring(7), taskCount);
                     tasks[index].unmark();
 
                     printLine();
@@ -96,9 +96,24 @@ public class Spike {
 
                 // Add a Deadline task
                 if (input.startsWith("deadline ")) {
-                    String rest = input.substring(9);
-                    String[] parts = rest.split("/by");
-                    Task task = new Deadline(parts[0], parts[1]);
+                    String rest = input.substring(9).trim();
+
+                    if (!rest.contains("/by")) {
+                        throw new DukeException("A deadline must have '/by <time>'.");
+                    }
+
+                    String[] parts = rest.split("/by", 2);
+                    String description = parts[0].trim();
+                    String by = parts[1].trim();
+
+                    if (description.isEmpty()) {
+                        throw new DukeException("The description of a deadline cannot be empty.");
+                    }
+                    if (by.isEmpty()) {
+                        throw new DukeException("The time for a deadline cannot be empty. Use: deadline <desc> /by <time>");
+                    }
+
+                    Task task = new Deadline(description, by);
 
                     tasks[taskCount] = task;
                     taskCount++;
@@ -113,12 +128,27 @@ public class Spike {
 
                 // Add an Event task
                 if (input.startsWith("event ")) {
-                    String rest = input.substring(6);
-                    String[] fromSplit = rest.split("/from");
-                    String description = fromSplit[0];
-                    String[] toSplit = fromSplit[1].split("/to");
+                    String rest = input.substring(6).trim();
 
-                    Task task = new Event(description, toSplit[0], toSplit[1]);
+                    if (!rest.contains("/from") || !rest.contains("/to")) {
+                        throw new DukeException("An event must have '/from <start>' and '/to <end>'.");
+                    }
+
+                    String[] fromSplit = rest.split("/from", 2);
+                    String description = fromSplit[0].trim();
+
+                    String[] toSplit = fromSplit[1].split("/to", 2);
+                    String from = toSplit[0].trim();
+                    String to = toSplit[1].trim();
+
+                    if (description.isEmpty()) {
+                        throw new DukeException("The description of an event cannot be empty.");
+                    }
+                    if (from.isEmpty() || to.isEmpty()) {
+                        throw new DukeException("Event start/end time cannot be empty. Use: event <desc> /from <start> /to <end>");
+                    }
+
+                    Task task = new Event(description, from, to);
 
                     tasks[taskCount] = task;
                     taskCount++;
@@ -143,6 +173,29 @@ public class Spike {
 
         scanner.close();
     }
+
+
+    private static int parseTaskIndex(String raw, int taskCount) throws DukeException {
+        String trimmed = raw.trim();
+
+        if (trimmed.isEmpty()) {
+            throw new DukeException("Please specify a task number.");
+        }
+
+        int number;
+        try {
+            number = Integer.parseInt(trimmed);
+        } catch (NumberFormatException e) {
+            throw new DukeException("Task number must be a number.");
+        }
+
+        if (number < 1 || number > taskCount) {
+            throw new DukeException("Task number is out of range.");
+        }
+
+        return number - 1;
+    }
+
 
     private static void printLine() {
         System.out.println(LINE);
