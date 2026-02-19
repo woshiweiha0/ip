@@ -5,6 +5,7 @@
 package spike;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Spike {
     private static final String LINE = "__________________________________________";
@@ -13,8 +14,7 @@ public class Spike {
         Scanner scanner = new Scanner(System.in);
 
         // Stores all tasks using polymorphism
-        Task[] tasks = new Task[100];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         printLine();
         System.out.println("Hello! I'm Spike");
@@ -41,28 +41,28 @@ public class Spike {
                 case "list":
                     printLine();
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < taskCount; i += 1) {
-                        System.out.println((i + 1) + "." + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i += 1) {
+                        System.out.println((i + 1) + "." + tasks.get(i));
                     }
                     printLine();
                     break;
 
                 case "mark": {
-                    int index = parseTaskIndex(rest, taskCount); // your helper method
-                    tasks[index].markAsDone();
+                    int index = parseTaskIndex(rest, tasks.size()); // your helper method
+                    tasks.get(index).markAsDone();
                     printLine();
                     System.out.println("Nice! I've marked this task as done:");
-                    System.out.println(tasks[index]);
+                    System.out.println(tasks.get(index));
                     printLine();
                     break;
                 }
 
                 case "unmark": {
-                    int index = parseTaskIndex(rest, taskCount);
-                    tasks[index].unmark();
+                    int index = parseTaskIndex(rest, tasks.size());
+                    tasks.get(index).unmark();
                     printLine();
                     System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println(tasks[index]);
+                    System.out.println(tasks.get(index));
                     printLine();
                     break;
                 }
@@ -72,12 +72,12 @@ public class Spike {
                         throw new SpikeException("The description of a todo cannot be empty.");
                     }
                     Task todo = new Todo(rest);
-                    tasks[taskCount++] = todo;
+                    tasks.add(todo);
 
                     printLine();
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + todo);
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     printLine();
                     break;
 
@@ -98,12 +98,12 @@ public class Spike {
                     }
 
                     Task deadline = new Deadline(description, by);
-                    tasks[taskCount++] = deadline;
+                    tasks.add(deadline);
 
                     printLine();
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + deadline);
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     printLine();
                     break;
                 }
@@ -129,12 +129,25 @@ public class Spike {
                     }
 
                     Task event = new Event(description, from, to);
-                    tasks[taskCount++] = event;
+                    tasks.add(event);
 
                     printLine();
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + event);
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    printLine();
+                    break;
+                }
+
+                case "delete": {
+                    int index = parseTaskIndex(rest, tasks.size());
+
+                    Task removed = tasks.remove(index);
+
+                    printLine();
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println("  " + removed);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     printLine();
                     break;
                 }
