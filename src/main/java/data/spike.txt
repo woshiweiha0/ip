@@ -1,4 +1,4 @@
-T | 1 | borrow book
-E | 0 | Meeting | Aug 6th 4pm | 6pm
+T | 0 | borrow book
 D | 0 | cs2113 coursemology | 7pm
 T | 0 | test
+T | 0 | read book

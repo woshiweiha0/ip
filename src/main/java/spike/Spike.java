@@ -4,14 +4,12 @@
  */
 package spike;
 
-import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Spike {
-    private static final String LINE = "__________________________________________";
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Ui ui = new Ui();
 
         // Stores all tasks using polymorphism
         ArrayList<Task> tasks;
@@ -20,17 +18,13 @@ public class Spike {
         } catch (SpikeException e) {
             // If loading fails, start with empty but still allow app to run
             tasks = new ArrayList<>();
-            System.out.println("Warning: " + e.getMessage());
-            System.out.println("Starting with an empty task list.");
+            ui.showLoadingError(e.getMessage());
         }
 
-        printLine();
-        System.out.println("Hello! I'm Spike");
-        System.out.println("What can I do for you?");
-        printLine();
+        ui.showWelcome();
 
         while (true) {
-            String input = scanner.nextLine().trim();
+            String input = ui.readCommand();
 
             try {
                 String[] parts = input.split("\\s+", 2);
@@ -39,29 +33,18 @@ public class Spike {
 
                 switch (command) {
                 case "bye":
-                    printLine();
-                    System.out.println("Bye. Hope to see you again soon!");
-                    printLine();
+                    ui.showGoodbye();
                     break;
 
                 case "list":
-                    printLine();
-                    System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i += 1) {
-                        System.out.println((i + 1) + "." + tasks.get(i));
-                    }
-                    printLine();
+                    ui.showTaskList(tasks);
                     break;
 
                 case "mark": {
-                    int index = parseTaskIndex(rest, tasks.size()); // your helper method
+                    int index = parseTaskIndex(rest, tasks.size());
                     tasks.get(index).markAsDone();
                     Storage.saveTasks(tasks);
-
-                    printLine();
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println(tasks.get(index));
-                    printLine();
+                    ui.showMark(tasks.get(index));
                     break;
                 }
 
@@ -69,11 +52,7 @@ public class Spike {
                     int index = parseTaskIndex(rest, tasks.size());
                     tasks.get(index).unmark();
                     Storage.saveTasks(tasks);
-
-                    printLine();
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println(tasks.get(index));
-                    printLine();
+                    ui.showUnmark(tasks.get(index));
                     break;
                 }
 
@@ -84,12 +63,7 @@ public class Spike {
                     Task todo = new Todo(rest);
                     tasks.add(todo);
                     Storage.saveTasks(tasks);
-
-                    printLine();
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + todo);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    printLine();
+                    ui.showAdd(todo, tasks.size());
                     break;
                 }
 
@@ -111,12 +85,7 @@ public class Spike {
                     Task deadline = new Deadline(description, by);
                     tasks.add(deadline);
                     Storage.saveTasks(tasks);
-
-                    printLine();
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + deadline);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    printLine();
+                    ui.showAdd(deadline, tasks.size());
                     break;
                 }
 
@@ -142,12 +111,7 @@ public class Spike {
                     Task event = new Event(description, from, to);
                     tasks.add(event);
                     Storage.saveTasks(tasks);
-
-                    printLine();
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + event);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    printLine();
+                    ui.showAdd(event, tasks.size());
                     break;
                 }
 
@@ -155,12 +119,7 @@ public class Spike {
                     int index = parseTaskIndex(rest, tasks.size());
                     Task removed = tasks.remove(index);
                     Storage.saveTasks(tasks);
-
-                    printLine();
-                    System.out.println("Noted. I've removed this task:");
-                    System.out.println("  " + removed);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    printLine();
+                    ui.showDelete(removed, tasks.size());
                     break;
                 }
 
@@ -173,13 +132,11 @@ public class Spike {
                 }
 
             } catch (SpikeException e) {
-                printLine();
-                System.out.println("OOPS!!! " + e.getMessage());
-                printLine();
+                ui.showError(e.getMessage());
             }
         }
 
-        scanner.close();
+        ui.close();
     }
 
     private static int parseTaskIndex(String raw, int taskCount) throws SpikeException {
@@ -201,9 +158,5 @@ public class Spike {
         }
 
         return number - 1;
-    }
-
-    private static void printLine() {
-        System.out.println(LINE);
     }
 }
