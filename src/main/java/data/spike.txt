@@ -1,4 +1,5 @@
-T | 0 | borrow book
-D | 1 | cs2113 coursemology | 7pm
+T | 1 | borrow book
+D | 0 | cs2113 coursemology | 7pm
 T | 0 | test
 T | 0 | read book
+E | 0 | gamble | 6pm | 7pm
