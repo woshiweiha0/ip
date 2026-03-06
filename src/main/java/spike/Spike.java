@@ -11,13 +11,11 @@ public class Spike {
     public static void main(String[] args) {
         Ui ui = new Ui();
 
-        // Stores all tasks using polymorphism
-        ArrayList<Task> tasks;
+        TaskList tasks;
         try {
-            tasks = Storage.loadTasks();
+            tasks = new TaskList(Storage.loadTasks());
         } catch (SpikeException e) {
-            // If loading fails, start with empty but still allow app to run
-            tasks = new ArrayList<>();
+            tasks = new TaskList();
             ui.showLoadingError(e.getMessage());
         }
 
@@ -37,21 +35,21 @@ public class Spike {
                     break;
 
                 case "list":
-                    ui.showTaskList(tasks);
+                    ui.showTaskList(tasks.getTasks());
                     break;
 
                 case "mark": {
                     int index = parseTaskIndex(rest, tasks.size());
-                    tasks.get(index).markAsDone();
-                    Storage.saveTasks(tasks);
+                    tasks.mark(index);
+                    Storage.saveTasks(tasks.getTasks());
                     ui.showMark(tasks.get(index));
                     break;
                 }
 
                 case "unmark": {
                     int index = parseTaskIndex(rest, tasks.size());
-                    tasks.get(index).unmark();
-                    Storage.saveTasks(tasks);
+                    tasks.unmark(index);
+                    Storage.saveTasks(tasks.getTasks());
                     ui.showUnmark(tasks.get(index));
                     break;
                 }
@@ -62,7 +60,7 @@ public class Spike {
                     }
                     Task todo = new Todo(rest);
                     tasks.add(todo);
-                    Storage.saveTasks(tasks);
+                    Storage.saveTasks(tasks.getTasks());
                     ui.showAdd(todo, tasks.size());
                     break;
                 }
@@ -84,7 +82,7 @@ public class Spike {
 
                     Task deadline = new Deadline(description, by);
                     tasks.add(deadline);
-                    Storage.saveTasks(tasks);
+                    Storage.saveTasks(tasks.getTasks());
                     ui.showAdd(deadline, tasks.size());
                     break;
                 }
@@ -110,15 +108,15 @@ public class Spike {
 
                     Task event = new Event(description, from, to);
                     tasks.add(event);
-                    Storage.saveTasks(tasks);
+                    Storage.saveTasks(tasks.getTasks());
                     ui.showAdd(event, tasks.size());
                     break;
                 }
 
                 case "delete": {
                     int index = parseTaskIndex(rest, tasks.size());
-                    Task removed = tasks.remove(index);
-                    Storage.saveTasks(tasks);
+                    Task removed = tasks.delete(index);
+                    Storage.saveTasks(tasks.getTasks());
                     ui.showDelete(removed, tasks.size());
                     break;
                 }
