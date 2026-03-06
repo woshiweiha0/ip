@@ -6,20 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-    private static final Path FILE_PATH = Paths.get("data", "spike.txt");
+    private final Path filePath;
     private static final String DELIM = " \\| ";
 
-    public static ArrayList<Task> loadTasks() throws SpikeException {
+    public Storage(String filePath) {
+        this.filePath = Paths.get(filePath);
+    }
+
+    public ArrayList<Task> loadTasks() throws SpikeException {
         ensureParentFolderExists();
 
-        if (!Files.exists(FILE_PATH)) {
-            // First run: no file yet -> start empty
+        if (!Files.exists(filePath)) {
             return new ArrayList<>();
         }
 
         List<String> lines;
         try {
-            lines = Files.readAllLines(FILE_PATH);
+            lines = Files.readAllLines(filePath);
         } catch (IOException e) {
             throw new SpikeException("Could not read save file: " + e.getMessage());
         }
@@ -37,7 +40,6 @@ public class Storage {
                 Task t = parseLine(trimmed);
                 tasks.add(t);
             } catch (Exception ex) {
-                // Stretch goal: handle corrupted lines gracefully
                 corruptedCount++;
             }
         }
@@ -49,7 +51,7 @@ public class Storage {
         return tasks;
     }
 
-    public static void saveTasks(ArrayList<Task> tasks) throws SpikeException {
+    public void saveTasks(ArrayList<Task> tasks) throws SpikeException {
         ensureParentFolderExists();
 
         ArrayList<String> lines = new ArrayList<>();
@@ -58,22 +60,23 @@ public class Storage {
         }
 
         try {
-            Files.write(FILE_PATH, lines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(filePath, lines,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             throw new SpikeException("Could not write save file: " + e.getMessage());
         }
     }
 
-    private static void ensureParentFolderExists() throws SpikeException {
+    private void ensureParentFolderExists() throws SpikeException {
         try {
-            Files.createDirectories(FILE_PATH.getParent());
+            Files.createDirectories(filePath.getParent());
         } catch (IOException e) {
             throw new SpikeException("Could not create data folder: " + e.getMessage());
         }
     }
 
-    private static Task parseLine(String line) throws SpikeException {
-        // We split on " | " (space-pipe-space) to match the Spike example format
+    private Task parseLine(String line) throws SpikeException {
         String[] parts = line.split(DELIM);
 
         if (parts.length < 3) {
@@ -117,10 +120,11 @@ public class Storage {
         if (isDone) {
             task.markAsDone();
         }
+
         return task;
     }
 
-    private static String toSaveString(Task task) throws SpikeException {
+    private String toSaveString(Task task) throws SpikeException {
         String done = task.isDone ? "1" : "0";
 
         if (task instanceof Todo) {

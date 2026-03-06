@@ -8,10 +8,11 @@ public class Spike {
 
     public static void main(String[] args) {
         Ui ui = new Ui();
+        Storage storage = new Storage("data/spike.txt");
 
         TaskList tasks;
         try {
-            tasks = new TaskList(Storage.loadTasks());
+            tasks = new TaskList(storage.loadTasks());
         } catch (SpikeException e) {
             tasks = new TaskList();
             ui.showLoadingError(e.getMessage());
@@ -38,7 +39,7 @@ public class Spike {
                 case "mark": {
                     int index = Parser.parseTaskIndex(rest, tasks.size());
                     tasks.mark(index);
-                    Storage.saveTasks(tasks.getTasks());
+                    storage.saveTasks(tasks.getTasks());
                     ui.showMark(tasks.get(index));
                     break;
                 }
@@ -46,7 +47,7 @@ public class Spike {
                 case "unmark": {
                     int index = Parser.parseTaskIndex(rest, tasks.size());
                     tasks.unmark(index);
-                    Storage.saveTasks(tasks.getTasks());
+                    storage.saveTasks(tasks.getTasks());
                     ui.showUnmark(tasks.get(index));
                     break;
                 }
@@ -54,7 +55,7 @@ public class Spike {
                 case "todo": {
                     Task todo = Parser.parseTodo(rest);
                     tasks.add(todo);
-                    Storage.saveTasks(tasks.getTasks());
+                    storage.saveTasks(tasks.getTasks());
                     ui.showAdd(todo, tasks.size());
                     break;
                 }
@@ -62,7 +63,7 @@ public class Spike {
                 case "deadline": {
                     Task deadline = Parser.parseDeadline(rest);
                     tasks.add(deadline);
-                    Storage.saveTasks(tasks.getTasks());
+                    storage.saveTasks(tasks.getTasks());
                     ui.showAdd(deadline, tasks.size());
                     break;
                 }
@@ -70,7 +71,7 @@ public class Spike {
                 case "event": {
                     Task event = Parser.parseEvent(rest);
                     tasks.add(event);
-                    Storage.saveTasks(tasks.getTasks());
+                    storage.saveTasks(tasks.getTasks());
                     ui.showAdd(event, tasks.size());
                     break;
                 }
@@ -78,7 +79,7 @@ public class Spike {
                 case "delete": {
                     int index = Parser.parseTaskIndex(rest, tasks.size());
                     Task removed = tasks.delete(index);
-                    Storage.saveTasks(tasks.getTasks());
+                    storage.saveTasks(tasks.getTasks());
                     ui.showDelete(removed, tasks.size());
                     break;
                 }
