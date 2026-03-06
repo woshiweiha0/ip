@@ -1,8 +1,10 @@
 /**
  * Spike is a simple command-line task manager.
- * It supports Todo, Deadline, and Event tasks.
+ * It supports Todo, Deadline, Event tasks.
  */
 package spike;
+
+import java.util.ArrayList;
 
 public class Spike {
 
@@ -35,6 +37,15 @@ public class Spike {
                 case "list":
                     ui.showTaskList(tasks.getTasks());
                     break;
+
+                case "find": {
+                    if (rest.isEmpty()) {
+                        throw new SpikeException("The keyword for find cannot be empty.");
+                    }
+                    ArrayList<Task> matchingTasks = tasks.find(rest);
+                    ui.showMatchingTasks(matchingTasks);
+                    break;
+                }
 
                 case "mark": {
                     int index = Parser.parseTaskIndex(rest, tasks.size());
