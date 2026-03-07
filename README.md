@@ -22,7 +22,7 @@ It runs entirely in the terminal and allows you to manage todos, deadlines, and 
 
 ### 1. Clone the repository
 
-
+```bash
 git clone https://github.com/woshiweiha0/ip.git
 
 
