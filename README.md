@@ -24,28 +24,28 @@ It runs entirely in the terminal and allows you to manage todos, deadlines, and 
 
 ```bash
 git clone https://github.com/woshiweiha0/ip.git
-
+```
 
 ### 2. Compile the program
 
 From the project root:
 
-
+```bash
 cd src/main/java
 javac spike/*.java
-
+```
 
 ### 3. Run Spike
 
-
+```bash
 java spike.Spike
-
+```
 
 ---
 
 ## Example Usage
 
-
+```
 todo read book
 deadline submit report /by Friday
 event meeting /from 2pm /to 4pm
@@ -54,7 +54,7 @@ mark 1
 find book
 delete 2
 bye
-
+```
 
 ---
 
@@ -68,18 +68,18 @@ For detailed documentation and examples, visit the full **User Guide**:
 
 ## Project Structure
 
-
+```
 src/main/java/spike/
-├── Spike.java # Main application
-├── Parser.java # Parses user commands
-├── TaskList.java # Stores and manages tasks
-├── Storage.java # Handles file saving/loading
-├── Ui.java # Handles user interaction
-├── Task.java # Base task class
-├── Todo.java # Todo task
-├── Deadline.java # Deadline task
-└── Event.java # Event task
-
+├── Spike.java       # Main application
+├── Parser.java      # Parses user commands
+├── TaskList.java    # Stores and manages tasks
+├── Storage.java     # Handles file saving/loading
+├── Ui.java          # Handles user interaction
+├── Task.java        # Base task class
+├── Todo.java        # Todo task
+├── Deadline.java    # Deadline task
+└── Event.java       # Event task
+```
 
 ---
 
