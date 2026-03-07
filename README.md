@@ -14,7 +14,7 @@ It runs entirely in the terminal and allows you to manage todos, deadlines, and 
 - **Mark / unmark** tasks as done
 - **Delete** tasks
 - **Find tasks** using keywords
-- **Persistent storage** (tasks saved automatically)
+- **Persistent storage** (tasks are saved automatically)
 
 ---
 
