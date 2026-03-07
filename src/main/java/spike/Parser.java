@@ -1,17 +1,40 @@
+/**
+ * Parses raw user input into command words, arguments, and task objects.
+ */
 package spike;
 
 public class Parser {
 
+    /**
+     * Extracts the command word from the user input.
+     *
+     * @param input Full user input.
+     * @return Command word.
+     */
     public static String getCommandWord(String input) {
         String[] parts = input.trim().split("\\s+", 2);
         return parts[0];
     }
 
+    /**
+     * Extracts the argument portion from the user input.
+     *
+     * @param input Full user input.
+     * @return Arguments after the command word, or an empty string if none.
+     */
     public static String getArguments(String input) {
         String[] parts = input.trim().split("\\s+", 2);
         return parts.length == 2 ? parts[1].trim() : "";
     }
 
+    /**
+     * Parses the user-supplied task number into a zero-based index.
+     *
+     * @param raw User input containing the task number.
+     * @param taskCount Total number of tasks currently in the list.
+     * @return Zero-based task index.
+     * @throws SpikeException If the input is empty, not a number, or out of range.
+     */
     public static int parseTaskIndex(String raw, int taskCount) throws SpikeException {
         String trimmed = raw.trim();
 
@@ -33,6 +56,13 @@ public class Parser {
         return number - 1;
     }
 
+    /**
+     * Parses input into a todo task.
+     *
+     * @param rest Description entered after the todo command.
+     * @return Todo task.
+     * @throws SpikeException If the description is empty.
+     */
     public static Todo parseTodo(String rest) throws SpikeException {
         if (rest.isEmpty()) {
             throw new SpikeException("The description of a todo cannot be empty.");
@@ -40,6 +70,13 @@ public class Parser {
         return new Todo(rest);
     }
 
+    /**
+     * Parses input into a deadline task.
+     *
+     * @param rest Description and deadline entered after the deadline command.
+     * @return Deadline task.
+     * @throws SpikeException If the input format is invalid.
+     */
     public static Deadline parseDeadline(String rest) throws SpikeException {
         if (!rest.contains("/by")) {
             throw new SpikeException("A deadline must have '/by <time>'.");
@@ -59,6 +96,13 @@ public class Parser {
         return new Deadline(description, by);
     }
 
+    /**
+     * Parses input into an event task.
+     *
+     * @param rest Description, start time, and end time entered after the event command.
+     * @return Event task.
+     * @throws SpikeException If the input format is invalid.
+     */
     public static Event parseEvent(String rest) throws SpikeException {
         if (!rest.contains("/from") || !rest.contains("/to")) {
             throw new SpikeException("An event must have '/from <start>' and '/to <end>'.");
