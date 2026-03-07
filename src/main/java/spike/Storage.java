@@ -1,3 +1,6 @@
+/**
+ * Handles loading tasks from the save file and saving tasks back to the file.
+ */
 package spike;
 
 import java.io.IOException;
@@ -9,10 +12,21 @@ public class Storage {
     private final Path filePath;
     private static final String DELIM = " \\| ";
 
+    /**
+     * Constructs a storage object using the given file path.
+     *
+     * @param filePath Path to the save file.
+     */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
     }
 
+    /**
+     * Loads tasks from the save file.
+     *
+     * @return List of loaded tasks.
+     * @throws SpikeException If the file cannot be read or the directory cannot be prepared.
+     */
     public ArrayList<Task> loadTasks() throws SpikeException {
         ensureParentFolderExists();
 
@@ -51,6 +65,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves the given list of tasks to the save file.
+     *
+     * @param tasks Tasks to save.
+     * @throws SpikeException If the file cannot be written.
+     */
     public void saveTasks(ArrayList<Task> tasks) throws SpikeException {
         ensureParentFolderExists();
 
@@ -68,6 +88,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Ensures that the parent folder of the save file exists.
+     *
+     * @throws SpikeException If the folder cannot be created.
+     */
     private void ensureParentFolderExists() throws SpikeException {
         try {
             Files.createDirectories(filePath.getParent());
@@ -76,6 +101,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses one line from the save file into a task object.
+     *
+     * @param line One line from the save file.
+     * @return Parsed task.
+     * @throws SpikeException If the line format is invalid.
+     */
     private Task parseLine(String line) throws SpikeException {
         String[] parts = line.split(DELIM);
 
@@ -124,6 +156,13 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Converts a task into the text format used in the save file.
+     *
+     * @param task Task to convert.
+     * @return Save-file string representation of the task.
+     * @throws SpikeException If the task type is unknown.
+     */
     private String toSaveString(Task task) throws SpikeException {
         String done = task.isDone ? "1" : "0";
 

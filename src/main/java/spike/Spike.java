@@ -1,6 +1,6 @@
 /**
  * Spike is a simple command-line task manager.
- * It supports Todo, Deadline, Event tasks.
+ * It supports todo, deadline, event, and find commands.
  */
 package spike;
 
@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 public class Spike {
 
+    /**
+     * Starts the Spike application.
+     *
+     * @param args Command-line arguments passed into the program.
+     */
     public static void main(String[] args) {
         Ui ui = new Ui();
         Storage storage = new Storage("data/spike.txt");
