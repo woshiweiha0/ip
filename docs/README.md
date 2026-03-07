@@ -3,7 +3,6 @@
 Spike is a **command-line task manager chatbot** that helps you track tasks quickly and efficiently using simple text commands.
 
 Spike supports the following task types:
-
 - Todo tasks
 - Deadline tasks
 - Event tasks
@@ -11,251 +10,234 @@ Spike supports the following task types:
 
 Spike runs in the terminal and stores tasks locally so they persist between runs.
 
+![Spike on launch](images/spikelaunch.png)
+
 ---
 
-# Features
+## Quick Navigation
 
-## Viewing all tasks
+- [list](#viewing-all-tasks--list)
+- [todo](#adding-a-todo-task--todo)
+- [deadline](#adding-a-deadline--deadline)
+- [event](#adding-an-event--event)
+- [mark](#marking-a-task-as-done--mark)
+- [unmark](#unmarking-a-task--unmark)
+- [delete](#deleting-a-task--delete)
+- [find](#finding-tasks--find)
+- [bye](#exiting-the-program--bye)
+
+---
+
+## Features
+
+> 📝 **Note:** Words in `UPPER_CASE` are parameters to be supplied by the user.  
+> e.g. in `todo DESCRIPTION`, `DESCRIPTION` is a parameter, such as `todo read book`.
+
+---
+
+### Viewing all tasks : `list`
 
 Shows all tasks currently in the list.
 
-Command:
-
-
-list
-
+Format: `list`
 
 Example:
-
-
+```
 list
-
+```
 
 Expected output:
-
-
+```
 Here are the tasks in your list:
 1.[T][ ] read book
 2.[D][ ] submit assignment (by: Friday)
-
+```
 
 ---
 
-## Adding a todo task
+### Adding a todo task : `todo`
 
 Adds a simple task with no date.
 
-Command:
-
-
-todo <description>
-
+Format: `todo DESCRIPTION`
 
 Example:
-
-
+```
 todo read book
-
+```
 
 Expected output:
-
-
+```
 Got it. I've added this task:
-[T][ ] read book
+  [T][ ] read book
 Now you have 1 tasks in the list.
-
+```
 
 ---
 
-## Adding a deadline
+### Adding a deadline : `deadline`
 
 Adds a task with a deadline.
 
-Command:
-
-
-deadline <description> /by <time>
-
+Format: `deadline DESCRIPTION /by TIME`
 
 Example:
-
-
+```
 deadline submit report /by Friday
-
+```
 
 Expected output:
-
-
+```
 Got it. I've added this task:
-[D][ ] submit report (by: Friday)
-
+  [D][ ] submit report (by: Friday)
+Now you have 2 tasks in the list.
+```
 
 ---
 
-## Adding an event
+### Adding an event : `event`
 
 Adds a task that occurs during a time range.
 
-Command:
-
-
-event <description> /from <start> /to <end>
-
+Format: `event DESCRIPTION /from START /to END`
 
 Example:
-
-
+```
 event meeting /from 2pm /to 4pm
-
+```
 
 Expected output:
-
-
+```
 Got it. I've added this task:
-[E][ ] meeting (from: 2pm to: 4pm)
-
+  [E][ ] meeting (from: 2pm to: 4pm)
+Now you have 3 tasks in the list.
+```
 
 ---
 
-## Marking a task as done
+### Marking a task as done : `mark`
 
 Marks a task as completed.
 
-Command:
+Format: `mark TASK_NUMBER`
 
-
-mark <task number>
-
+> 💡 **Tip:** Use `list` first to check the task numbers before marking.
 
 Example:
-
-
+```
 mark 1
-
+```
 
 Expected output:
-
-
+```
 Nice! I've marked this task as done:
-[T][X] read book
-
+  [T][X] read book
+```
 
 ---
 
-## Unmarking a task
+### Unmarking a task : `unmark`
 
 Marks a completed task as not done.
 
-Command:
-
-
-unmark <task number>
-
+Format: `unmark TASK_NUMBER`
 
 Example:
-
-
+```
 unmark 1
-
-
----
-
-## Deleting a task
-
-Removes a task from the list.
-
-Command:
-
-
-delete <task number>
-
-
-Example:
-
-
-delete 2
-
+```
 
 Expected output:
-
-
-Noted. I've removed this task:
-[D][ ] submit report
-
+```
+OK, I've marked this task as not done yet:
+  [T][ ] read book
+```
 
 ---
 
-## Finding tasks
+### Deleting a task : `delete`
+
+Removes a task from the list permanently.
+
+Format: `delete TASK_NUMBER`
+
+> ⚠️ **Warning:** Deleted tasks cannot be recovered.
+
+Example:
+```
+delete 2
+```
+
+Expected output:
+```
+Noted. I've removed this task:
+  [D][ ] submit report
+Now you have 2 tasks in the list.
+```
+
+---
+
+### Finding tasks : `find`
 
 Searches for tasks containing a keyword.
 
-Command:
+Format: `find KEYWORD`
 
-
-find <keyword>
-
+> 💡 **Tip:** The search is case-sensitive. Use lowercase to match most tasks.
 
 Example:
-
-
+```
 find book
-
+```
 
 Expected output:
-
-
+```
 Here are the matching tasks in your list:
 1.[T][ ] read book
-
+```
 
 ---
 
-## Exiting the program
+### Exiting the program : `bye`
 
-Exits Spike.
+Exits Spike. Tasks are saved automatically before closing.
 
-Command:
-
-
-bye
-
+Format: `bye`
 
 Example:
-
-
+```
 bye
-
+```
 
 Expected output:
-
-
+```
 Bye. Hope to see you again soon!
-
-
----
-
-# Command Summary
-
-| Command | Format |
-|------|------|
-| list | `list` |
-| todo | `todo <description>` |
-| deadline | `deadline <description> /by <time>` |
-| event | `event <description> /from <start> /to <end>` |
-| mark | `mark <task number>` |
-| unmark | `unmark <task number>` |
-| delete | `delete <task number>` |
-| find | `find <keyword>` |
-| exit | `bye` |
+```
 
 ---
 
-# Saving
+## Command Summary
 
-Spike automatically saves tasks to:
+| Command    | Format                                          |
+|------------|-------------------------------------------------|
+| `list`     | `list`                                          |
+| `todo`     | `todo DESCRIPTION`                              |
+| `deadline` | `deadline DESCRIPTION /by TIME`                 |
+| `event`    | `event DESCRIPTION /from START /to END`         |
+| `mark`     | `mark TASK_NUMBER`                              |
+| `unmark`   | `unmark TASK_NUMBER`                            |
+| `delete`   | `delete TASK_NUMBER`                            |
+| `find`     | `find KEYWORD`                                  |
+| `bye`      | `bye`                                           |
 
+---
 
+## Saving
+
+Spike automatically saves your tasks to:
+
+```
 data/spike.txt
+```
 
-
-Tasks will be loaded automatically when the program starts again.
+Tasks are loaded automatically when the program starts again. You do not need to save manually.
